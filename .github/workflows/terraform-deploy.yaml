@@ -74,11 +74,13 @@ jobs:
       run: |
         kubectl rollout status deployment ingress-nginx-controller --namespace ingress-nginx --timeout=120s
 
+# Add Helm repo for Cluster Autoscaler
     - name: Add Helm repo for Cluster Autoscaler
       run: |
         helm repo add autoscaler https://kubernetes.github.io/autoscaler
         helm repo update
-
+        
+# Deploy Cluster Autoscaler
     - name: Deploy Cluster Autoscaler
       run: |
         helm upgrade --install my-release autoscaler/cluster-autoscaler \
