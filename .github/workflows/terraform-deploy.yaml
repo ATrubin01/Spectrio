@@ -5,6 +5,7 @@ on:
     branches:
       - main  
       - dev
+      - staging
 
 env:
   # create new variable with custom dynamic value depending on branch name
