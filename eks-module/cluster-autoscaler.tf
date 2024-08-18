@@ -1,3 +1,7 @@
+data "aws_eks_cluster_auth" "authentication" {
+  name = var.cluster_name
+}
+
 provider "kubernetes" {
   host                   = var.cluster_endpoint
   token                  = data.aws_eks_cluster_auth.authentication.token
