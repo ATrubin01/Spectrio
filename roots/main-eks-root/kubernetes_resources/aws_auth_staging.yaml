@@ -1,24 +1,21 @@
 apiVersion: v1
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::468457242339:role/eks-workers-staging
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+    - rolearn: arn:aws:iam::468457242339:role/GitHubActionsCICDrole
+      username: github-actions
+      groups:
+        - system:masters
+    - rolearn: arn:aws:iam::468457242339:role/iam-role-eks
+      username: admin
+      groups:
+        - system:masters
 kind: ConfigMap
 metadata:
   name: aws-auth
   namespace: kube-system
-data:
-  mapRoles: |
-    - groups:
-      - system:bootstrappers
-      - system:nodes
-      rolearn: arn:aws:iam::383585068161:role/fp-eks-worker-node-role
-      username: system:node:{{EC2PrivateDNSName}}
-    - groups:
-      - system:masters
-      rolearn: arn:aws:iam::383585068161:role/AWSReservedSSO_Administrator_a72305569e9173dc
-      username: adminrole
-    - rolearn: arn:aws:iam::383585068161:role/GitHubActionsCICDrole
-      username: gha-cicd
-      groups:
-        - system:masters
-    - rolearn: arn:aws:iam::383585068161:role/GitHubActionsTerraformIAMrole
-      username: gha-terraform
-      groups:
-        - system:masters
+
