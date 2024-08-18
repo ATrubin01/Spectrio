@@ -41,4 +41,4 @@ resource "helm_release" "karpenter" {
   }
 
   depends_on = [aws_eks_node_group.node_group_01, aws_eks_node_group.node_group_02]
-
+}
