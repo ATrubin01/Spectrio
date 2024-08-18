@@ -33,7 +33,7 @@ jobs:
         audience: sts.amazonaws.com
 
     - name: Terraform Initialize
-      run: terraform init -backend-config="bucket=spectrio-eks-project" -backend-config="key=terraform/spectrio-eks-project/${{ env.ENVIRONMENT_STAGE }}.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-state-lock" -backend-config="encrypt=true"
+      run: terraform init -backend-config="bucket=spectrio-project" -backend-config="key=terraform/spectrio-eks-project/${{ env.ENVIRONMENT_STAGE }}.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-state-lock" -backend-config="encrypt=true"
 
     - name: Terraform Plan
       run: terraform plan -var-file=${{ env.ENVIRONMENT_STAGE }}.tfvars" -out=tfplan
