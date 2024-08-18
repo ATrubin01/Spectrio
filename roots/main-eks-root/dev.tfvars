@@ -5,7 +5,7 @@ cluster_version    = "1.30"
 # cluster_subnet_ids = ["subnet-095201f33ea053de7", "subnet-00cfa932c032ac868"]
 cluster_cidr       = "172.20.0.0/16"
 
-cluster_tag = "spectrio-project=dev"
+cluster_tag = "spectrio-cluster-dev"
 
 ##### Trust policy #####
 
@@ -30,7 +30,7 @@ eks_cluster_sg_description = "Allow All inbound traffic from Self and all outbou
 eks_cluster_sg_tags = {
   Name                                   = "eks-cluster-sg-dev"
   "kubernetes.io/cluster/spectrio-cluster-dev" = "owned"
-  "aws:eks:cluster-name"                 = "spectrio-project-eks-cluster-dev"
+  "aws:eks:cluster-name"                 = "spectrio-cluster-dev"
 }
 ingress_port_ipv4     = 443
 ingress_protocol_ipv4 = "tcp"
@@ -88,7 +88,7 @@ private_subnet_object = {
     name = "private-subnet-2-dev"
   }
 }
-eks_cluster_name = "spectrio-project-eks-cluster-dev"
+eks_cluster_name = "spectrio-cluster-dev"
 
 
 
