@@ -57,3 +57,5 @@ Purpose: The storage class modification was necessary to optimize storage costs 
 Conclusion
 This project provided valuable experience in setting up and managing an Amazon EKS cluster with specific configurations and challenges. The issues encountered during the setup process, particularly with IAM roles, service accounts, and add-on configurations, were resolved through careful troubleshooting and reconfiguration. The successful deployment of the ingress controller, autoscaler, and storage class modifications further enhanced the cluster's capabilities and ensured its readiness for production workloads.
 
+
+
