@@ -113,6 +113,11 @@ spec:
         app: cluster-autoscaler
     spec:
       serviceAccountName: cluster-autoscaler
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "podinfo"
+          effect: "NoSchedule"
       containers:
         - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.21.0
           name: cluster-autoscaler
