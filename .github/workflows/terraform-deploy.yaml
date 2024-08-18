@@ -74,29 +74,6 @@ jobs:
       run: |
         kubectl rollout status deployment ingress-nginx-controller --namespace ingress-nginx --timeout=120s
 
-    - name: Set environment variables for Helm
-      run: |
-        export KARPENTER_IAM_ROLE_ARN=$(terraform output -raw karpenter_controller_role_arn)
-        export CLUSTER_NAME=$(terraform output -raw cluster_name)
-          export CLUSTER_ENDPOINT=$(terraform output -raw cluster_endpoint)
-
-    - name: Add Karpenter Helm repository
-      run: |
-        helm repo add karpenter https://charts.karpenter.sh
-        helm repo update
-
-    - name: Helm Upgrade Karpenter
-      run: |
-        helm upgrade --install --namespace karpenter --create-namespace \
-          karpenter karpenter/karpenter \
-          --version 0.16.3 \
-          --set serviceAccount.annotations.eks.amazonaws.com/role-arn=${KARPENTER_IAM_ROLE_ARN} \
-          --set clusterName=${CLUSTER_NAME} \
-          --set clusterEndpoint=${CLUSTER_ENDPOINT} \
-          --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${CLUSTER_NAME} \
-          --wait
-
-
     # - name: Terraform Destroy 
     #   run: terraform destroy -auto-approve
 
