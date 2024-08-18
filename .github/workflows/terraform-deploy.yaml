@@ -47,6 +47,11 @@ jobs:
        kubectl apply -f ./kubernetes_resources/gp3-storage-class.yaml
        account_number=$(aws sts get-caller-identity --query "Account" --output text)
 
+# Login to EKS
+    - name: Login to EKS - update kubeconfig and apply aws-auth configmap
+      run: |
+        aws eks update-kubeconfig --name spectrio-cluster-${ENVIRONMENT_STAGE} --region us-east-1
+
 # installing ingress-nginx Helm repository for ingress-controller
     - name: Add ingress-nginx Helm repository
       run: |
