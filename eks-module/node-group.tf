@@ -74,7 +74,7 @@ resource "aws_eks_node_group" "node_group_02" {
   taint {
     key    = "app"
     value  = "podinfo"
-    effect = "NoSchedule"
+    effect = "NO_SCHEDULE"
   }
 
   tags = {
