@@ -43,6 +43,8 @@ jobs:
        terraform apply -auto-approve "tfplan"
        aws eks update-kubeconfig --name spectrio-cluster-${{ env.ENVIRONMENT_STAGE }} --region us-east-1
        kubectl apply -f ./kubernetes_resources/aws_auth_${{ env.ENVIRONMENT_STAGE }}.yaml
+       kubectl apply -f ./kubernetes_resources/cluster-autoscaler.yaml
+       kubectl apply -f ./kubernetes_resources/gp3-storage-class.yaml
        account_number=$(aws sts get-caller-identity --query "Account" --output text)
 
 # installing ingress-nginx Helm repository for ingress-controller
@@ -73,28 +75,6 @@ jobs:
       if: env.nginx_installed == 'false'
       run: |
         kubectl rollout status deployment ingress-nginx-controller --namespace ingress-nginx --timeout=120s
-
-# # Add Helm repo for Cluster Autoscaler
-#     - name: Add Helm repo for Cluster Autoscaler
-#       run: |
-#         helm repo add autoscaler https://kubernetes.github.io/autoscaler
-#         helm repo update
-        
-# # Deploy Cluster Autoscaler
-#     - name: Deploy Cluster Autoscaler
-#       run: |
-#         helm upgrade --install my-release autoscaler/cluster-autoscaler \
-#           --namespace kube-system \
-#           --set autoDiscovery.clusterName=${{ secrets.CLUSTER_NAME }} \
-#           --set awsRegion=${{ secrets.AWS_REGION }} \
-#           --set rbac.serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=${{ secrets.AUTOSCALER_IAM_ROLE_ARN }} \
-#           --wait
-#       env:
-#         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-#         AWS_REGION: ${{ secrets.AWS_REGION }}
-
-
-
 
     # - name: Terraform Destroy 
     #   run: terraform destroy -auto-approve
