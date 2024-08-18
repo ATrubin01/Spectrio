@@ -16,13 +16,31 @@ data "aws_iam_policy_document" "karpenter_controller_assume_role_policy" {
   }
 }
 
+resource "aws_iam_role" "nodes" {
+  name               = "KarpenterNodeRole"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role" "karpenter_controller" {
   assume_role_policy = data.aws_iam_policy_document.karpenter_controller_assume_role_policy.json
   name               = "karpenter-controller"
 }
 
 resource "aws_iam_policy" "karpenter_controller" {
-  policy = file("./controller-trust-policy.json")
+  policy = file("${path.module}/controller-trust-policy.json")
   name   = "KarpenterController"
 }
 
