@@ -88,4 +88,4 @@ private_subnet_object = {
     name = "private-subnet-2-staging"
   }
 }
-eks_cluster_name = "spectrio-project-eks-cluster-staging"
+eks_cluster_name = "spectrio-cluster-staging"

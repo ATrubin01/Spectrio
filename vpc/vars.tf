@@ -81,7 +81,7 @@ variable "private_subnet_object" {
 
 variable "eks_cluster_name" {
   type    = string
-  default = "spectrio-cluster-dev"
+  default = "spectrio-cluster-staging"
 }
 
 
