@@ -88,7 +88,7 @@ private_subnet_object = {
     name = "private-subnet-2-dev"
   }
 }
-eks_cluster_name = "spectrio-project-eks-cluster-dev"
+eks_cluster_name = "spectrio-cluster-dev"
 
 
 
