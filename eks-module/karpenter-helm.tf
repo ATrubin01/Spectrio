@@ -7,7 +7,6 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.cluster.name, "--region", "us-east-1"]  # Update region if necessary
       command     = "aws"
     }
-    skip_tls_verify = false
   }
 }
 
