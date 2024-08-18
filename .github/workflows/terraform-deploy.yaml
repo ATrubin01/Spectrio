@@ -80,6 +80,11 @@ jobs:
         export CLUSTER_NAME=$(terraform output -raw cluster_name)
           export CLUSTER_ENDPOINT=$(terraform output -raw cluster_endpoint)
 
+    - name: Add Karpenter Helm repository
+      run: |
+        helm repo add karpenter https://charts.karpenter.sh
+        helm repo update
+
     - name: Helm Upgrade Karpenter
       run: |
         helm upgrade --install --namespace karpenter --create-namespace \
