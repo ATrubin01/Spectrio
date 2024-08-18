@@ -17,6 +17,25 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+### Elastic IP for NAT Gateway ###
+resource "aws_eip" "nat" {
+  domain = "vpc" 
+  tags = {
+    Name = "eks-nat-eip"
+  }
+}
+
+
+### NAT Gateway ###
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = element(values(aws_subnet.pub_sub), 0).id  # Dynamically gets the first public subnet
+  tags = {
+    Name = "eks-nat-gateway"
+  }
+}
+
+
 ### Public Route Table ###
 
 resource "aws_route_table" "pub_rt" {
@@ -35,6 +54,12 @@ resource "aws_route_table" "pub_rt" {
 
 resource "aws_route_table" "priv_rt" {
   vpc_id = aws_vpc.spectrio_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
   tags = {
     Name = var.priv_rt_name
   }
@@ -72,7 +97,6 @@ resource "aws_subnet" "pub_sub" {
   }
 }
 
-
 ### Private Subnets ### 
 
 resource "aws_subnet" "priv_sub" {
@@ -87,4 +111,3 @@ resource "aws_subnet" "priv_sub" {
     "kubernetes.io/role/internal-elb"               = 1
   }
 }
-
