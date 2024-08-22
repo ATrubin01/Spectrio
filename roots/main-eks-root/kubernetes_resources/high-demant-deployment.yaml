@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: low-resource-deployment
 spec:
-  replicas: 40
+  replicas: 60
   selector:
     matchLabels:
       app: low-resource-app
