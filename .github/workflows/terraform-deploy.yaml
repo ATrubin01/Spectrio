@@ -39,48 +39,48 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -var-file=${{ env.ENVIRONMENT_STAGE }}.tfvars -out=tfplan
 
-#     - name: Terraform Apply and Update Kubeconfig
-#       run: |
-#        terraform apply -auto-approve "tfplan"
-#        aws eks update-kubeconfig --name spectrio-cluster-${{ env.ENVIRONMENT_STAGE }} --region us-east-1
-#        kubectl apply -f ./kubernetes_resources/aws_auth_${{ env.ENVIRONMENT_STAGE }}.yaml
-#        kubectl apply -f ./kubernetes_resources/cluster-autoscaler.yaml
-#        kubectl apply -f ./kubernetes_resources/gp3-storage-class.yaml
-#        account_number=$(aws sts get-caller-identity --query "Account" --output text)
+    - name: Terraform Apply and Update Kubeconfig
+      run: |
+       terraform apply -auto-approve "tfplan"
+       aws eks update-kubeconfig --name spectrio-cluster-${{ env.ENVIRONMENT_STAGE }} --region us-east-1
+       kubectl apply -f ./kubernetes_resources/aws_auth_${{ env.ENVIRONMENT_STAGE }}.yaml
+       kubectl apply -f ./kubernetes_resources/cluster-autoscaler.yaml
+       kubectl apply -f ./kubernetes_resources/gp3-storage-class.yaml
+       account_number=$(aws sts get-caller-identity --query "Account" --output text)
 
-# # Login to EKS
-#     - name: Login to EKS - update kubeconfig and apply aws-auth configmap
-#       run: |
-#         aws eks update-kubeconfig --name spectrio-cluster-${ENVIRONMENT_STAGE} --region us-east-1
+# Login to EKS
+    - name: Login to EKS - update kubeconfig and apply aws-auth configmap
+      run: |
+        aws eks update-kubeconfig --name spectrio-cluster-${ENVIRONMENT_STAGE} --region us-east-1
 
-# # installing ingress-nginx Helm repository for ingress-controller
-#     - name: Add ingress-nginx Helm repository
-#       run: |
-#         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-#         helm repo update
+# installing ingress-nginx Helm repository for ingress-controller
+    - name: Add ingress-nginx Helm repository
+      run: |
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo update
 
-# # Check if the Ingress Controller is already installed
-#     - name: Check if NGINX Ingress Controller is already installed
-#       id: check-nginx
-#       run: |
-#         if kubectl get deployment -n ingress-nginx | grep -q 'ingress-nginx-controller'; then
-#           echo "nginx_installed=true" >> $GITHUB_ENV
-#         else
-#           echo "nginx_installed=false" >> $GITHUB_ENV
-#         fi
+# Check if the Ingress Controller is already installed
+    - name: Check if NGINX Ingress Controller is already installed
+      id: check-nginx
+      run: |
+        if kubectl get deployment -n ingress-nginx | grep -q 'ingress-nginx-controller'; then
+          echo "nginx_installed=true" >> $GITHUB_ENV
+        else
+          echo "nginx_installed=false" >> $GITHUB_ENV
+        fi
 
-# # installing the ingress-controller
-#     - name: Install NGINX Ingress controller
-#       if: env.nginx_installed == 'false'
-#       run: |
-#         helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-#         --namespace ingress-nginx --create-namespace
+# installing the ingress-controller
+    - name: Install NGINX Ingress controller
+      if: env.nginx_installed == 'false'
+      run: |
+        helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+        --namespace ingress-nginx --create-namespace
 
-# # Wait for the Ingress Controller to be ready
-#     - name: Wait for Ingress Controller to be ready
-#       if: env.nginx_installed == 'false'
-#       run: |
-#         kubectl rollout status deployment ingress-nginx-controller --namespace ingress-nginx --timeout=120s
+# Wait for the Ingress Controller to be ready
+    - name: Wait for Ingress Controller to be ready
+      if: env.nginx_installed == 'false'
+      run: |
+        kubectl rollout status deployment ingress-nginx-controller --namespace ingress-nginx --timeout=120s
 
-    - name: Terraform Destroy 
-      run: terraform destroy -auto-approve
+    # - name: Terraform Destroy 
+    #   run: terraform destroy -auto-approve
